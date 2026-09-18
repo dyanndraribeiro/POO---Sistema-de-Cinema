@@ -9,8 +9,8 @@ Projeto da disciplina de Programação Orientada a Objetos (UNICAP) — implemen
 
 | Etapa | Conteúdo | Prazo |
 |---|---|---|
-| 1 | Classes e encapsulamento | -2026 |
-| 2 | Herança e sobrecarga | -2026 |
+| 1 | Classes e encapsulamento | 2026 |
+| 2 | Herança e sobrecarga | 2026 |
 | 3 | Classe abstrata e exceções | 2026 |
 | 4 | Padrões de projeto | — |
 
