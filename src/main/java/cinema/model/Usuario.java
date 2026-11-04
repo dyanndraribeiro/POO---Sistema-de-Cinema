@@ -100,25 +100,19 @@ public class Usuario {
         this.codigoVerificadorCartao = codigoVerificadorCartao;
     }
 
-    /**
-     * Realiza uma nova compra para este usuário.
-     * TODO: implementar integração com a classe Compra.
-     */
     public Compra realizarCompra(Compra compra) {
         return compra;
     }
 
-    /**
-     * Altera uma compra já existente.
-     * TODO: implementar regra de alteração.
-     */
+    
     public void alterarCompra(Compra compra) {
     }
 
-    /**
-     * Cancela uma compra já existente.
-     * TODO: implementar regra de cancelamento.
-     */
+    
     public void cancelarCompra(Compra compra) {
+    }
+
+    public double calcularValorBilhete(double valor) {
+        return valor;
     }
 }
