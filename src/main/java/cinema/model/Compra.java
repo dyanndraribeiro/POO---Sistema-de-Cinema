@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Compra {
 
-    private List<String> itens; // pipoca, refrigerante, chocolate, etc. (estoque infinito)
+    private List<String> itens; // pipoca, refrigerante, chocolate, etc.
     private List<Bilhete> bilhetes;
 
     public Compra() {
@@ -33,18 +33,38 @@ public class Compra {
         itens.add(item);
     }
 
-    /**
-     * Compra um único bilhete, escolhendo uma cadeira livre dentro da sessão.
-     * TODO: implementar lógica de escolha de cadeira única.
-     */
-    public Bilhete comprarBilhete(Usuario usuario, Sala sala, Sessao sessao, int linha, int coluna) {
-        return null;
+    
+    /** 
+    *Compra um único bilhete, escolhendo uma cadeira livre dentro da sessão.*/
+    /** TODO: implementar lógica de escolha de cadeira única.*/ 
+     
+       public Bilhete comprarBilhete(Usuario usuario, Sala sala, Sessao sessao, int linha, int coluna) {
+        // cadeira inexistente
+        if (linha < 0 || linha >= Sessao.LINHAS || coluna < 0 || coluna >= Sessao.COLUNAS) {
+            return null;
+        }
+        // cadeira já ocupada
+        if (!sessao.cadeiraLivre(linha, coluna)) {
+            return null;
+        }
+
+        Filme filme = sessao.getFilme();
+        // polimorfismo: Usuario paga inteiro, Estudante paga meia
+        double valor = usuario.calcularValorBilhete(filme.getValor());
+
+            
+        sessao.ocuparCadeira(linha, coluna);
+        String cadeira = (char) ('A' + linha) + String.valueOf(coluna + 1); // ex: "A1", "J15"
+
+        Bilhete bilhete = new Bilhete(usuario.getUser(), usuario.getCpf(), sala, sessao, filme, valor, cadeira);
+        bilhetes.add(bilhete);
+        return bilhete;
     }
 
-    /**
-     * Compra vários bilhetes de uma vez, sugerindo cadeiras juntas para o grupo.
-     * TODO: implementar sugestão de cadeiras adjacentes.
-     */
+   
+     /* Compra vários bilhetes de uma vez, sugerindo cadeiras juntas para o grupo*/
+     /* TODO: implementar sugestão de cadeiras adjacentes.*/
+   
     public List<Bilhete> comprarBilhetes(Usuario usuario, Sala sala, Sessao sessao, int quantidade) {
         return new ArrayList<>();
     }
