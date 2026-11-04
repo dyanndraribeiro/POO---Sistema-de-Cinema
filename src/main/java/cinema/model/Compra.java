@@ -48,4 +48,29 @@ public class Compra {
     public List<Bilhete> comprarBilhetes(Usuario usuario, Sala sala, Sessao sessao, int quantidade) {
         return new ArrayList<>();
     }
+
+    // Sobrecargas: 
+    public Bilhete comprarBilhete(Usuario usuario, Sala sala, Sessao sessao, int linha, int coluna, CupomPromocional cupom) {
+        Bilhete bilhete = comprarBilhete(usuario, sala, sessao, linha, coluna); 
+        if (bilhete != null && cupom != null) {
+            bilhete.setValor(cupom.aplicarDesconto(bilhete.getValor())); // Aplica o desconto proporcionado
+        }
+        return bilhete;
+    }
+
+    public void adicionarItem(String item, CupomPromocional cupom) {
+        if (cupom == null) {
+            this.adicionarItem(item);
+            return;
+        }
+
+        for (Produto produto : Produto.values()) {
+            if (produto.getNome().equalsIgnoreCase(item) || produto.name().equalsIgnoreCase(item)) {
+                double valorDescontado = cupom.aplicarDesconto(produto.getValor());
+                this.itens.add(produto.getNome() + " - R$ " + String.format("%.2f", valorDescontado));
+                return;
+            }
+        }
+        this.itens.add(item + " (Cupom " + cupom.getNome() + " associado)");
+    }
 }
