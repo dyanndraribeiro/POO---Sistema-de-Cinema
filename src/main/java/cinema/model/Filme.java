@@ -3,9 +3,13 @@ package cinema.model;
 public class Filme {
 
     private String nome;
-    private int duracao; // duração em minutos
+    private int duracao;
     private String sinopse;
     private double valor;
+    private double nota;
+    private int quantidadeCriticos;
+    private Critica[] critica = new Critica[100];
+    private int totalCriticas;
 
     public Filme() {
     }
@@ -47,6 +51,46 @@ public class Filme {
 
     public void setValor(double valor) {
         this.valor = valor;
+    }
+
+    public double getNota() {
+        return nota;
+    }
+
+    public void setNota(double nota) {
+        this.nota = nota;
+    }
+
+    public int getQuantidadeCriticos() {
+        return quantidadeCriticos;
+    }
+
+    public void setQuantidadeCriticos(int quantidadeCriticos) {
+        this.quantidadeCriticos = quantidadeCriticos;
+    }
+
+    public Critica[] getCritica() {
+        return critica;
+    }
+
+    public void setCritica(Critica[] critica) {
+        this.critica = critica;
+    }
+
+    public int getTotalCriticas() {
+        return totalCriticas;
+    }
+
+    public void setTotalCriticas(int totalCriticas) {
+        this.totalCriticas = totalCriticas;
+    }
+
+    public void adicionarCritica(Critica novaCritica) {
+        if (totalCriticas >= critica.length) {
+            throw new IllegalStateException("Limite de críticas do filme atingido.");
+        }
+        critica[totalCriticas] = novaCritica;
+        totalCriticas++;
     }
 
     @Override
