@@ -1,5 +1,5 @@
 
-package cinema;
+package cinema.model;
 
 import cinema.model.Administrador;
 import cinema.model.Usuario;
