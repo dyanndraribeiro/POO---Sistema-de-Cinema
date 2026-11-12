@@ -38,21 +38,29 @@ public class Compra {
     *Compra um único bilhete, escolhendo uma cadeira livre dentro da sessão.*/
     /** TODO: implementar lógica de escolha de cadeira única.*/ 
      
-       public Bilhete comprarBilhete(Usuario usuario, Sala sala, Sessao sessao, int linha, int coluna) {
+       public Bilhete comprarBilhete(Usuario usuario, Sala sala, Sessao sessao, int linha, int coluna) throws VendasException{
         // cadeira inexistente
         if (linha < 0 || linha >= Sessao.LINHAS || coluna < 0 || coluna >= Sessao.COLUNAS) {
             return null;
         }
-        // cadeira já ocupada
-        if (!sessao.cadeiraLivre(linha, coluna)) {
-            return null;
-        }
 
         Filme filme = sessao.getFilme();
+
+        if(!filme.isEmCartaz()){
+            throw new VendasException("Erro: o filme não está mais em cartaz");
+        }
+
+        if (sessao.isHorarioPassado()) {
+            throw new VendasException("Erro: O horário do filme já passou.");
+        }
+
+        if (!sessao.cadeiraLivre(linha, coluna)) {
+            throw new VendasException("Erro: A poltrona já foi selecionada.");
+        }
+
         // polimorfismo: Usuario paga inteiro, Estudante paga meia
         double valor = usuario.calcularValorBilhete(filme.getValor());
 
-            
         sessao.ocuparCadeira(linha, coluna);
         String cadeira = (char) ('A' + linha) + String.valueOf(coluna + 1); // ex: "A1", "J15"
 
@@ -70,7 +78,7 @@ public class Compra {
     }
 
     // Sobrecargas: 
-    public Bilhete comprarBilhete(Usuario usuario, Sala sala, Sessao sessao, int linha, int coluna, CupomPromocional cupom) {
+    public Bilhete comprarBilhete(Usuario usuario, Sala sala, Sessao sessao, int linha, int coluna, CupomPromocional cupom) throws VendasException{
         Bilhete bilhete = comprarBilhete(usuario, sala, sessao, linha, coluna); 
         if (bilhete != null && cupom != null) {
             bilhete.setValor(cupom.aplicarDesconto(bilhete.getValor())); // Aplica o desconto proporcionado

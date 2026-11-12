@@ -1,5 +1,7 @@
 package cinema.model;
 
+import java.time.LocalDateTime;
+
 public class Sessao {
 
     public static final int LINHAS = 10;
@@ -8,6 +10,7 @@ public class Sessao {
     private Filme filme;
     private String horario; // ex: "08:00 - 10:00"
     private boolean[][] cadeiras; // true = ocupada, false = livre
+    private LocalDateTime dataHoraSessao;
 
     public Sessao() {
         this.cadeiras = new boolean[LINHAS][COLUNAS];
@@ -43,6 +46,14 @@ public class Sessao {
         this.cadeiras = cadeiras;
     }
 
+    public LocalDateTime getDataHoraSessao() {
+        return dataHoraSessao;
+    }
+
+    public void setDataHoraSessao(LocalDateTime dataHoraSessao) {
+        this.dataHoraSessao = dataHoraSessao;
+    }
+
     /**
      * Verifica se uma cadeira específica está livre.
      */
@@ -55,5 +66,11 @@ public class Sessao {
      */
     public void ocuparCadeira(int linha, int coluna) {
         cadeiras[linha][coluna] = true;
+    }
+
+    // Método auxiliar para verificar se a sessão já expirou
+    public boolean isHorarioPassado() {
+        if (this.dataHoraSessao == null) return false;
+        return LocalDateTime.now().isAfter(this.dataHoraSessao);
     }
 }

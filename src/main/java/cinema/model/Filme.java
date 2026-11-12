@@ -10,6 +10,7 @@ public class Filme {
     private int quantidadeCriticos;
     private Critica[] critica = new Critica[100];
     private int totalCriticas;
+    private boolean emCartaz = true;
 
     public Filme() {
     }
@@ -83,6 +84,14 @@ public class Filme {
 
     public void setTotalCriticas(int totalCriticas) {
         this.totalCriticas = totalCriticas;
+    }
+
+    public boolean isEmCartaz() {
+        return emCartaz;
+    }
+
+    public void setEmCartaz(boolean emCartaz) {
+        this.emCartaz = emCartaz;
     }
 
     public void adicionarCritica(Critica novaCritica) {
