@@ -61,6 +61,9 @@ public class RepositorioUsuarios {
                 if (campos[0].equals("CRITICO")) {
                     usuarios.add(new Critico(campos[1], campos[2], campos[3], idade, campos[5], campos[6],
                             campos[7], campos[8], campos[9], campos[10]));
+                } else if (campos[0].equals("ESTUDANTE")) {
+                    usuarios.add(new Estudante(campos[1], campos[2], campos[3], idade, campos[5], campos[6],
+                            campos[7], campos[8], campos[9]));
                 } else {
                     usuarios.add(new Usuario(campos[1], campos[2], campos[3], idade, campos[5], campos[6],
                             campos[7], campos[8], campos[9]));
@@ -79,6 +82,8 @@ public class RepositorioUsuarios {
                 if (usuario instanceof Critico) {
                     tipo = "CRITICO";
                     origem = limpar(((Critico) usuario).getOrigem());
+                } else if (usuario instanceof Estudante) {
+                    tipo = "ESTUDANTE";
                 }
                 escritor.write(tipo + "|" + limpar(usuario.getUser()) + "|" + limpar(usuario.getCpf()) + "|"
                         + limpar(usuario.getSenha()) + "|" + usuario.getIdade() + "|"
