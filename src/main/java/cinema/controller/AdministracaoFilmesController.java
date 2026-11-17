@@ -1,4 +1,3 @@
-
 package cinema.controller;
 
 import cinema.model.Administrador;
@@ -36,7 +35,9 @@ public class AdministracaoFilmesController {
         String descricao = tela.getDescricao();
         double preco = Double.parseDouble(tela.getPreco());
 
-        return new Filme(nome, duracao, descricao, preco);
+        Filme filme = new Filme(nome, duracao, descricao, preco);
+        filme.setEmCartaz(tela.isEmCartaz());
+        return filme;
     }
 
     private void incluirFilme() {
