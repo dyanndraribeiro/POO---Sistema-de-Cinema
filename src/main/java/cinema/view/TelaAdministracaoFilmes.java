@@ -75,8 +75,8 @@ public class TelaAdministracaoFilmes extends JFrame {
     public void preencherCampos(Filme filme) {
         txtNome.setText(filme.getNome());
         txtDuracao.setText(String.valueOf(filme.getDuracao()));
-        txtDescricao.setText(filme.getDescricao());
-        txtPreco.setText(String.valueOf(filme.getPreco()));
+        txtDescricao.setText(filme.getSinopse()); 
+        txtPreco.setText(String.valueOf(filme.getValor())); 
     }
 
     public void atualizarLista(List<Filme> filmes) {
