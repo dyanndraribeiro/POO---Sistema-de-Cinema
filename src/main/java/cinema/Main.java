@@ -2,6 +2,7 @@ package cinema;
 
 import cinema.controller.CompraController;
 import cinema.controller.FilmeController;
+import cinema.model.Critico;
 import cinema.model.Estudante;
 import cinema.model.Filme;
 import cinema.model.RepositorioFilmes;
@@ -12,8 +13,10 @@ import cinema.view.CompraGateway;
 import cinema.view.CompraGatewayImpl;
 import cinema.view.FilmesGateway;
 import cinema.view.FilmesGatewayImpl;
+import cinema.view.LoginGatewayImpl;
 import cinema.view.TelaCompra;
 import cinema.view.TelaFilmesCartaz;
+import cinema.view.TelaLogin;
 import cinema.view.TelaPrincipal;
 
 import javax.swing.SwingUtilities;
@@ -64,23 +67,36 @@ public class Main {
             salas.add(sala1);
             salas.add(sala2);
 
-            // Usuário comprador
-            Usuario usuarioLogado = new Estudante(
-                    "Carlos Silva", "12345678900", "senha123",
+            // Usuários disponíveis no login (um de cada tipo)
+            List<Usuario> usuarios = new ArrayList<>();
+            usuarios.add(new Usuario(
+                    "Ana Souza", "11111111111", "1234",
+                    30, "Feminino", "ana@email.com",
+                    "Nubank", "1111", "111"));
+            usuarios.add(new Estudante(
+                    "Carlos Silva", "12345678900", "1234",
                     21, "Masculino", "carlos@email.com",
-                    "Nubank", "1234", "123"
-            );
+                    "Nubank", "1234", "123"));
+            usuarios.add(new Critico(
+                    "Marina Lima", "22222222222", "1234",
+                    35, "Feminino", "marina@email.com",
+                    "Inter", "2222", "222", "Jornal do Cinema"));
 
-            // Inicialização do MVC 
+            // Inicialização do MVC
             CompraController compraController = new CompraController();
-            CompraGateway gateway = new CompraGatewayImpl(compraController, usuarioLogado, salas);
             FilmesGateway filmesGateway = new FilmesGatewayImpl(salas, filmeController);
 
-            Runnable abrirCompra = () -> new TelaCompra(gateway).setVisible(true);
-            Runnable abrirFilmes = () -> new TelaFilmesCartaz(filmesGateway, abrirCompra).setVisible(true);
+            // Login: depois de escolher o usuário e a senha, abre a tela principal dele
+            LoginGatewayImpl login = new LoginGatewayImpl(usuarios);
+            new TelaLogin(login, indice -> {
+                Usuario usuarioLogado = login.obter(indice);
+                CompraGateway gateway = new CompraGatewayImpl(compraController, usuarioLogado, salas);
 
-            TelaPrincipal telaPrincipal = new TelaPrincipal(gateway, abrirFilmes);
-            telaPrincipal.setVisible(true);
+                Runnable abrirCompra = () -> new TelaCompra(gateway).setVisible(true);
+                Runnable abrirFilmes = () -> new TelaFilmesCartaz(filmesGateway, abrirCompra).setVisible(true);
+
+                new TelaPrincipal(gateway, abrirFilmes).setVisible(true);
+            }).setVisible(true);
         });
     }
 
