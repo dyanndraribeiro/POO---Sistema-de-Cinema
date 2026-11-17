@@ -1,4 +1,3 @@
-
 package cinema.view;
 
 import javax.swing.*;
@@ -9,6 +8,7 @@ import cinema.model.Filme;
 public class TelaAdministracaoFilmes extends JFrame {
 
     private JTextField txtNome, txtDuracao, txtDescricao, txtPreco;
+    private JCheckBox chkEmCartaz;
     private JList<String> listaFilmes;
 
     private JButton btnIncluir, btnExcluir, btnAlterar;
@@ -37,6 +37,10 @@ public class TelaAdministracaoFilmes extends JFrame {
         painel.add(new JLabel("Preço:"));
         txtPreco = new JTextField();
         painel.add(txtPreco);
+
+        painel.add(new JLabel("Em cartaz:"));
+        chkEmCartaz = new JCheckBox("", true);
+        painel.add(chkEmCartaz);
 
         btnIncluir = new JButton("Incluir");
         btnExcluir = new JButton("Excluir");
@@ -68,6 +72,10 @@ public class TelaAdministracaoFilmes extends JFrame {
         return txtPreco.getText();
     }
 
+    public boolean isEmCartaz() {
+        return chkEmCartaz.isSelected();
+    }
+
     public String getFilmeSelecionado() {
         return listaFilmes.getSelectedValue();
     }
@@ -77,6 +85,7 @@ public class TelaAdministracaoFilmes extends JFrame {
         txtDuracao.setText(String.valueOf(filme.getDuracao()));
         txtDescricao.setText(filme.getSinopse()); 
         txtPreco.setText(String.valueOf(filme.getValor())); 
+        chkEmCartaz.setSelected(filme.isEmCartaz());
     }
 
     public void atualizarLista(List<Filme> filmes) {
@@ -110,6 +119,7 @@ public class TelaAdministracaoFilmes extends JFrame {
         txtDuracao.setText("");
         txtDescricao.setText("");
         txtPreco.setText("");
+        chkEmCartaz.setSelected(true);
     }
 
     public void mensagem(String mensagem) {

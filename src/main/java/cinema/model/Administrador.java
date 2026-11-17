@@ -1,28 +1,34 @@
-
 package cinema.model;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Administrador extends Base implements GerenciaFilmes {
 
     private double salario;
     private int id;
-    private List<Usuario> usuarios;
-    private List<Filme> filmes;
+    private RepositorioUsuarios repositorioUsuarios;
+    private RepositorioFilmes repositorioFilmes;
 
     public Administrador() {
-        usuarios = new ArrayList<>();
-        filmes = new ArrayList<>();
+        this.repositorioUsuarios = new RepositorioUsuarios();
+        this.repositorioFilmes = new RepositorioFilmes();
     }
 
     public Administrador(String nome, int idade, String email,
                          double salario, int id) {
+        this(nome, idade, email, salario, id,
+             new RepositorioUsuarios(), new RepositorioFilmes());
+    }
+
+    public Administrador(String nome, int idade, String email,
+                         double salario, int id,
+                         RepositorioUsuarios repositorioUsuarios,
+                         RepositorioFilmes repositorioFilmes) {
         super(nome, idade, email);
         this.salario = salario;
         this.id = id;
-        usuarios = new ArrayList<>();
-        filmes = new ArrayList<>();
+        this.repositorioUsuarios = repositorioUsuarios;
+        this.repositorioFilmes = repositorioFilmes;
     }
 
     public double getSalario() {
@@ -41,92 +47,60 @@ public class Administrador extends Base implements GerenciaFilmes {
         this.id = id;
     }
 
+    public RepositorioUsuarios getRepositorioUsuarios() {
+        return repositorioUsuarios;
+    }
+
+    public void setRepositorioUsuarios(RepositorioUsuarios repositorioUsuarios) {
+        this.repositorioUsuarios = repositorioUsuarios;
+    }
+
+    public RepositorioFilmes getRepositorioFilmes() {
+        return repositorioFilmes;
+    }
+
+    public void setRepositorioFilmes(RepositorioFilmes repositorioFilmes) {
+        this.repositorioFilmes = repositorioFilmes;
+    }
+
     public List<Usuario> getUsuarios() {
-        return usuarios;
+        return repositorioUsuarios.listar();
     }
 
     public List<Filme> getFilmes() {
-        return filmes;
+        return repositorioFilmes.listar();
     }
 
     @Override
     public boolean adicionarUsuario(Usuario usuario) {
         if (usuario == null) return false;
-
-        for (Usuario u : usuarios) {
-            if (u.getCpf() != null &&
-                u.getCpf().equals(usuario.getCpf())) {
-                return false;
-            }
-        }
-
-        usuarios.add(usuario);
-        return true;
+        return repositorioUsuarios.incluir(usuario);
     }
 
     @Override
     public boolean alterarUsuario(Usuario usuario) {
         if (usuario == null) return false;
-
-        for (int i = 0; i < usuarios.size(); i++) {
-            if (usuarios.get(i).getCpf() != null &&
-                usuarios.get(i).getCpf().equals(usuario.getCpf())) {
-                usuarios.set(i, usuario);
-                return true;
-            }
-        }
-
-        return false;
+        return repositorioUsuarios.alterar(usuario.getCpf(), usuario);
     }
 
     public boolean excluirUsuario(String cpf) {
-        for (Usuario u : usuarios) {
-            if (u.getCpf() != null && u.getCpf().equals(cpf)) {
-                usuarios.remove(u);
-                return true;
-            }
-        }
-
-        return false;
+        return repositorioUsuarios.excluir(cpf);
     }
 
     @Override
     public boolean incluirFilme(Filme filme) {
         if (filme == null) return false;
-
-        for (Filme f : filmes) {
-            if (f.getNome().equalsIgnoreCase(filme.getNome())) {
-                return false;
-            }
-        }
-
-        filmes.add(filme);
-        return true;
+        return repositorioFilmes.incluir(filme);
     }
 
     @Override
     public boolean excluirFilme(String nome) {
-        for (Filme f : filmes) {
-            if (f.getNome().equalsIgnoreCase(nome)) {
-                filmes.remove(f);
-                return true;
-            }
-        }
-
-        return false;
+        return repositorioFilmes.excluir(nome);
     }
 
     @Override
     public boolean alterarFilme(String nome, Filme novoFilme) {
         if (novoFilme == null) return false;
-
-        for (int i = 0; i < filmes.size(); i++) {
-            if (filmes.get(i).getNome().equalsIgnoreCase(nome)) {
-                filmes.set(i, novoFilme);
-                return true;
-            }
-        }
-
-        return false;
+        return repositorioFilmes.alterar(nome, novoFilme);
     }
 }
