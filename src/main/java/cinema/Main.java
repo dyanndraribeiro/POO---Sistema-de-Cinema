@@ -1,16 +1,21 @@
 package cinema;
 
 import cinema.controller.CompraController;
+import cinema.controller.FilmeController;
 import cinema.model.Estudante;
 import cinema.model.Filme;
+import cinema.model.RepositorioFilmes;
 import cinema.model.Sala;
 import cinema.model.Sessao;
 import cinema.model.Usuario;
 import cinema.view.CompraGateway;
 import cinema.view.CompraGatewayImpl;
+import cinema.view.FilmesGateway;
+import cinema.view.FilmesGatewayImpl;
+import cinema.view.TelaCompra;
+import cinema.view.TelaFilmesCartaz;
 import cinema.view.TelaPrincipal;
 
-import javax.swing.JOptionPane;
 import javax.swing.SwingUtilities;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -20,13 +25,18 @@ public class Main {
 
     public static void main(String[] args) {
         SwingUtilities.invokeLater(() -> {
-            
-            // Criação dos Filmes de exemplo 
-            Filme filme1 = new Filme("Gato de Botas 2", 102, "O Gato de Botas descobre que sua paixão pela aventura cobrou seu preço.", 30.0);
-            Filme filme2 = new Filme("Jurassic Park", 127, "Dinossauros clonados fogem do controle em um parque temático.", 28.0);
-            
-            Filme filmeForaCartaz = new Filme("Filme Antigo", 95, "Este filme já saiu de exibição.", 20.0);
-            filmeForaCartaz.setEmCartaz(false); // Testa o erro de filme fora de cartaz
+
+            // Persistência: os repositórios são criados uma única vez e compartilhados
+            RepositorioFilmes repositorioFilmes = new RepositorioFilmes();
+            FilmeController filmeController = new FilmeController(repositorioFilmes);
+
+            // Criação dos Filmes de exemplo (ficam salvos em filmes.txt)
+            Filme filme1 = garantirFilme(repositorioFilmes, new Filme("Gato de Botas 2", 102, "O Gato de Botas descobre que sua paixão pela aventura cobrou seu preço.", 30.0));
+            Filme filme2 = garantirFilme(repositorioFilmes, new Filme("Jurassic Park", 127, "Dinossauros clonados fogem do controle em um parque temático.", 28.0));
+
+            Filme filmeAntigo = new Filme("Filme Antigo", 95, "Este filme já saiu de exibição.", 20.0);
+            filmeAntigo.setEmCartaz(false); // Testa o erro de filme fora de cartaz
+            Filme filmeForaCartaz = garantirFilme(repositorioFilmes, filmeAntigo);
 
             // Criação das Sessões 
             Sessao sessao1 = new Sessao(filme1, "14:00 - 16:00");
@@ -58,21 +68,24 @@ public class Main {
             Usuario usuarioLogado = new Estudante(
                     "Carlos Silva", "12345678900", "senha123",
                     21, "Masculino", "carlos@email.com",
-                    "Nubank", "1234", "123", "2026001"
+                    "Nubank", "1234", "123"
             );
 
             // Inicialização do MVC 
             CompraController compraController = new CompraController();
             CompraGateway gateway = new CompraGatewayImpl(compraController, usuarioLogado, salas);
+            FilmesGateway filmesGateway = new FilmesGatewayImpl(salas, filmeController);
 
-            //Ação provisória para o botão da tela de Crystal até ela finalizar
-            Runnable abrirFilmes = () -> JOptionPane.showMessageDialog(
-                    null,
-                    "Tela de filmes em cartaz aguardando integração da Crystal."
-            );
+            Runnable abrirCompra = () -> new TelaCompra(gateway).setVisible(true);
+            Runnable abrirFilmes = () -> new TelaFilmesCartaz(filmesGateway, abrirCompra).setVisible(true);
 
             TelaPrincipal telaPrincipal = new TelaPrincipal(gateway, abrirFilmes);
             telaPrincipal.setVisible(true);
         });
+    }
+
+    private static Filme garantirFilme(RepositorioFilmes repositorio, Filme filme) {
+        repositorio.incluir(filme);
+        return repositorio.buscarPorNome(filme.getNome());
     }
 }
