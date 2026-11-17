@@ -105,15 +105,19 @@ public class RepositorioFilmes {
     }
 
     public boolean alterar(String nomeAtual, Filme novoFilme) {
-        Filme antigo = buscarPorNome(nomeAtual);
-        if (antigo == null) {
+        Filme filme = buscarPorNome(nomeAtual);
+        if (filme == null) {
             return false;
         }
-        novoFilme.setNota(antigo.getNota());
-        novoFilme.setQuantidadeCriticos(antigo.getQuantidadeCriticos());
-        novoFilme.setCritica(antigo.getCritica());
-        novoFilme.setTotalCriticas(antigo.getTotalCriticas());
-        filmes.set(filmes.indexOf(antigo), novoFilme);
+        Filme existente = buscarPorNome(novoFilme.getNome());
+        if (existente != null && existente != filme) {
+            return false;
+        }
+        filme.setNome(novoFilme.getNome());
+        filme.setDuracao(novoFilme.getDuracao());
+        filme.setSinopse(novoFilme.getSinopse());
+        filme.setValor(novoFilme.getValor());
+        filme.setEmCartaz(novoFilme.isEmCartaz());
         salvar();
         return true;
     }
