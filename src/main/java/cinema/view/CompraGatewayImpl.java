@@ -68,4 +68,8 @@ public class CompraGatewayImpl implements CompraGateway {
         return controller.realizarCompraBilhete(
                 usuario, salas.get(sala), visiveis(sala).get(sessao), linha, coluna, c);
     }
+        @Override
+    public String nomeUsuario() {
+        return usuario.getUser();
+    }
 }

@@ -2,6 +2,7 @@ package cinema.view;
 
 
 public interface CompraGateway {
+    String nomeUsuario();
 
     String[] salas();
 
