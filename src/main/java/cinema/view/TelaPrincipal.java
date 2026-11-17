@@ -3,10 +3,10 @@ package cinema.view;
 import javax.swing.*;
 import java.awt.*;
 
-/** View: tela principal (menu). Só abre as outras telas. */
+
 public class TelaPrincipal extends JFrame {
 
-    /** abrirFilmes: abre a tela de filmes em cartaz (feita pela Crystal). */
+    
     public TelaPrincipal(CompraGateway ctrl, Runnable abrirFilmes) {
         super("Cinema");
         setDefaultCloseOperation(EXIT_ON_CLOSE);

@@ -5,8 +5,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/** View: mapa de cadeiras clicável + cupom. Sem regra de negócio: o valor (inclusive o
- *  preço de estudante e o cupom) vem calculado pelo Model e aparece na mensagem da compra. */
+
 public class TelaCompra extends JFrame {
 
     private static final int LINHAS = 10, COLUNAS = 15;

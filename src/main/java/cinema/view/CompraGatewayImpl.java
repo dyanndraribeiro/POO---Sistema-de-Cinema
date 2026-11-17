@@ -9,14 +9,12 @@ import cinema.model.Usuario;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Liga a View ao CompraController do Gilberto, usando as classes reais do Model
- * (Sala, Sessao, CupomPromocional).
- */
+
+ 
 public class CompraGatewayImpl implements CompraGateway {
 
     private final CompraController controller;
-    private final Usuario usuario;          // quem está comprando (Usuario ou Estudante)
+    private final Usuario usuario;         
     private final List<Sala> salas;
 
     public CompraGatewayImpl(CompraController controller, Usuario usuario, List<Sala> salas) {
@@ -55,7 +53,7 @@ public class CompraGatewayImpl implements CompraGateway {
     public String[] cupons() {
         CupomPromocional[] todos = CupomPromocional.values();
         String[] nomes = new String[todos.length];
-        for (int i = 0; i < nomes.length; i++) nomes[i] = todos[i].toString();   // ex.: CINE10 (10% de desconto)
+        for (int i = 0; i < nomes.length; i++) nomes[i] = todos[i].toString();   
         return nomes;
     }
 
