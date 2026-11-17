@@ -1,5 +1,6 @@
 package cinema.view;
 
+import cinema.controller.FilmeController;
 import cinema.model.Filme;
 import cinema.model.Sala;
 import cinema.model.Sessao;
@@ -12,34 +13,35 @@ import java.util.Map;
 public class FilmesGatewayImpl implements FilmesGateway {
 
     private final List<Sala> salas;
+    private final FilmeController filmeController;
 
-    public FilmesGatewayImpl(List<Sala> salas) {
+    public FilmesGatewayImpl(List<Sala> salas, FilmeController filmeController) {
         this.salas = salas;
+        this.filmeController = filmeController;
     }
 
     @Override
     public String[][] filmes() {
-        Map<String, Filme> filmes = new LinkedHashMap<>();
         Map<String, List<String>> horarios = new LinkedHashMap<>();
 
         for (Sala sala : salas) {
             for (Sessao sessao : sala.getSessoes()) {
-                if (sessao == null || sessao.getFilme() == null) continue;
-                String nome = sessao.getFilme().getNome();
-                filmes.putIfAbsent(nome, sessao.getFilme());
-                horarios.computeIfAbsent(nome, k -> new ArrayList<>())
+                if (sessao == null || sessao.getFilme() == null || sessao.getFilme().getNome() == null) continue;
+                String chave = sessao.getFilme().getNome().toLowerCase();
+                horarios.computeIfAbsent(chave, k -> new ArrayList<>())
                         .add(sala.getNome() + " - " + sessao.getHorario());
             }
         }
 
         List<String[]> linhas = new ArrayList<>();
-        for (Map.Entry<String, Filme> e : filmes.entrySet()) {
-            Filme f = e.getValue();
+        for (Filme f : filmeController.listarFilmesEmCartaz()) {
+            List<String> sessoes = horarios.get(String.valueOf(f.getNome()).toLowerCase());
+            String textoSessoes = sessoes == null ? "Nenhuma sessão cadastrada." : String.join("\n", sessoes);
             linhas.add(new String[]{
-                    e.getKey(),
+                    f.getNome(),
                     String.valueOf(f.getDuracao()),
                     "R$ " + f.getValor(),
-                    String.join("\n", horarios.get(e.getKey())),
+                    textoSessoes,
                     String.valueOf(f.getSinopse())
             });
         }
