@@ -6,6 +6,7 @@ import cinema.model.RepositorioUsuarios;
 import cinema.view.TelaAdministracaoFilmes;
 import cinema.controller.CompraController;
 import cinema.controller.FilmeController;
+import cinema.model.TipoSala;
 import cinema.model.Critico;
 import cinema.model.Estudante;
 import cinema.model.Filme;
@@ -59,11 +60,11 @@ public class Main {
             sessaoForaCartaz.setDataHoraSessao(LocalDateTime.now().plusHours(5));
 
             // Configuração das Salas
-            Sala sala1 = new Sala("Sala 1 - VIP");
+            Sala sala1 = new Sala("Sala 1 - 3D", TipoSala.SALA_3D);
             sala1.definirSessao(0, sessao1);
             sala1.definirSessao(1, sessaoExpirada);
 
-            Sala sala2 = new Sala("Sala 2 - IMAX");
+            Sala sala2 = new Sala("Sala 2 - XD", TipoSala.XD);
             sala2.definirSessao(0, sessao2);
             sala2.definirSessao(1, sessaoForaCartaz);
 

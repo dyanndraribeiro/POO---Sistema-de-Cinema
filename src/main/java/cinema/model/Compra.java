@@ -58,8 +58,11 @@ public class Compra {
             throw new VendasException("Erro: A poltrona já foi selecionada.");
         }
 
-        // polimorfismo: Usuario paga inteiro, Estudante paga meia
-        double valor = usuario.calcularValorBilhete(filme.getValor());
+        double valorBase = filme.getValor();
+        if (sala != null && sala.getTipo() != null) {
+            valorBase = valorBase * sala.getTipo().getMultiplicador(); // multiplicador do tipo da sala
+        }
+        double valor = usuario.calcularValorBilhete(valorBase);
 
         sessao.ocuparCadeira(linha, coluna);
         String cadeira = (char) ('A' + linha) + String.valueOf(coluna + 1); // ex: "A1", "J15"
@@ -75,6 +78,21 @@ public class Compra {
    
     public List<Bilhete> comprarBilhetes(Usuario usuario, Sala sala, Sessao sessao, int quantidade) {
         return new ArrayList<>();
+    }
+
+    /** Adiciona um produto do balcão (enum Produto) à compra. */
+    public void adicionarItem(Produto produto) {
+        this.itens.add(produto.getNome() + " - R$ " + String.format("%.2f", produto.getValor()));
+     }
+
+    /** Adiciona um produto do balcão aplicando o desconto de um cupom promocional. */
+    public void adicionarItem(Produto produto, CupomPromocional cupom) {
+        if (cupom == null) {
+            this.adicionarItem(produto);
+            return;
+        }
+        double valorDescontado = cupom.aplicarDesconto(produto.getValor());
+        this.itens.add(produto.getNome() + " - R$ " + String.format("%.2f", valorDescontado));
     }
 
     // Sobrecargas: 
