@@ -1,5 +1,9 @@
 package cinema;
 
+import cinema.controller.AdministracaoFilmesController;
+import cinema.model.Administrador;
+import cinema.model.RepositorioUsuarios;
+import cinema.view.TelaAdministracaoFilmes;
 import cinema.controller.CompraController;
 import cinema.controller.FilmeController;
 import cinema.model.Critico;
@@ -86,6 +90,15 @@ public class Main {
             CompraController compraController = new CompraController();
             FilmesGateway filmesGateway = new FilmesGatewayImpl(salas, filmeController);
 
+            // Administração de filmes: o Administrador usa o MESMO repositório de filmes do sistema
+            Administrador administrador = new Administrador(
+                    "Administrador", 40, "admin@cinema.com", 5000.0, 1,
+                    new RepositorioUsuarios(), repositorioFilmes);
+            Runnable abrirAdministracao = () -> {
+                TelaAdministracaoFilmes tela = new TelaAdministracaoFilmes();
+                new AdministracaoFilmesController(administrador, tela);
+                tela.setVisible(true);
+            };
             // Login: depois de escolher o usuário e a senha, abre a tela principal dele
             LoginGatewayImpl login = new LoginGatewayImpl(usuarios);
             new TelaLogin(login, indice -> {
@@ -95,7 +108,7 @@ public class Main {
                 Runnable abrirCompra = () -> new TelaCompra(gateway).setVisible(true);
                 Runnable abrirFilmes = () -> new TelaFilmesCartaz(filmesGateway, abrirCompra).setVisible(true);
 
-                new TelaPrincipal(gateway, abrirFilmes).setVisible(true);
+               new TelaPrincipal(gateway, abrirFilmes, abrirAdministracao).setVisible(true);
             }).setVisible(true);
         });
     }
